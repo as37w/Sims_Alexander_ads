@@ -82,7 +82,7 @@ int main()
 }
 
 //Method to check if the game has been won
-int checkwin(int board_Size)
+int checkwin(int gameCounter)
 {
   if (board[1] == board[2] && board[2] == board[3])
        return 1;
@@ -108,19 +108,11 @@ int checkwin(int board_Size)
    else if (board[3] == board[5] && board[5] == board[7])
        return 1;
 
-    else for(int i = 0; i < board_Size; i++)
-    {
-      int drawCounter = 0;
-      if(board[i] = "X" || "O")
-      {
-        drawCounter++;
-      }
-      if(drawCounter = 9)
+      else if(gameCounter == 7)
       {
         return 0;
       }
 
-    }
     return -1;
 }
 
@@ -138,13 +130,13 @@ void tictactoe(int board_Size, struct node *list)
        {
          player = 1;
          mark = 'X';
-         printf("Its player 1s turn!\n");
+         printf("Its player 2s turn!\n");
        }
        else
        {
          player = 2;
          mark = 'O';
-         printf("Its player 2s turn!\n");
+         printf("Its player 1s turn!\n");
        }
 
         //Checks if the user has entered any special commands
@@ -186,7 +178,7 @@ void tictactoe(int board_Size, struct node *list)
             gameBoard();
           }
         //Checks to see if the game has been won
-         j = checkwin(board_Size);
+         j = checkwin(gameCounter);
         //Changes the turn to the next player
          player++;
       }
@@ -195,6 +187,29 @@ void tictactoe(int board_Size, struct node *list)
         {
           gameBoard();
         }
+
+        if(j == 0)
+        {
+          printf("The game has ended in a draw\n");
+          writeList(&list);
+          freeListMem(&list);
+          printf("Do you want to play again? (y/n) \n");
+          scanf("%s", input);
+
+          if(strcmp(input, "y") == 0)
+          {
+            for(int r = 0; r < board_Size; r++)
+            {
+              board[r] = r + '0';
+            }
+          gameCounter = -1;
+          gameBoard();
+        }
+        else if(strcmp(input, "n") == 0)
+        {
+          exit(0);
+        }
+      }
 
         //Runs if the game has been won, saves the game data and frees the ll memory
         if(j == 1){
@@ -325,13 +340,13 @@ void readList(int board_Size)
     if(testArray[i] == testArray[1] || testArray[i] == testArray[3] || testArray[i] == testArray[5] || testArray[i] == testArray[7] || testArray[i] == testArray[9] )
     {
       value = testArray[i] - '0';
-      printf("Player 1 placed an X in position: %1c\n", testArray[i]);
+      printf("Player 2 placed an X in position: %1c\n", testArray[i]);
       board[value] = 'X';
     }
     else
     {
       value = testArray[i] - '0';
-      printf("Player 2 placed an O in position: %1c\n", testArray[i]);
+      printf("Player 1 placed an O in position: %1c\n", testArray[i]);
       board[value] = 'O';
     }
     Sleep(2000);
